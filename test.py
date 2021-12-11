@@ -35,10 +35,12 @@ for i in range(0,5):
     entlist[3].append(tk.Checkbutton(master=frm_chk1))
     entlist[4].append(tk.Checkbutton(master=frm_chk2))
     # entlist[-1].grid(row=idx,column=0,padx=5,pady=2)
-    for i in range(3):
-        entlist[i][-1].pack(pady=3,fill=tk.BOTH)
-    for i in range(3,5):
-        entlist[i][-1].pack(fill=tk.BOTH)
+    for j in range(3):
+        entlist[j][-1].pack(pady=3,fill=tk.BOTH)
+    for j in range(3,5):
+        if (i!=4)|(j!=4):
+            entlist[j][-1].pack(fill=tk.BOTH)
+
     entlist[0][-1].insert(index=0, string=preset_ent[count%len(preset_ent)]+'. ')
     count +=1
 
