@@ -1,13 +1,13 @@
-# """"""""DATE PICKER"""""""""
+# DATE PICKER
 # import tkinter  as tk 
 # from tkcalendar import DateEntry
-# my_w = tk.Tk()
-# my_w.geometry("340x220")  
+# window = tk.Tk()
+# window.geometry("340x220")  
 
-# cal=DateEntry(my_w,selectmode='day')
-# cal.grid(row=1,column=1,padx=15)
+cal=DateEntry(window,selectmode='day')
+cal.grid(row=1,column=1,padx=15)
 
-# my_w.mainloop()
+# window.mainloop()
 
 import tkinter as tk
 from tkcalendar import Calendar

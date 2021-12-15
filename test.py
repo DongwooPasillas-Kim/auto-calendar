@@ -1,6 +1,8 @@
 import tkinter as tk
 import string
+from tkinter.constants import NORMAL
 from tkinter.filedialog import askopenfile, asksaveasfilename
+from tkcalendar import DateEntry
 
 window = tk.Tk()
 frm_ent1 = tk.LabelFrame(master=window, width=30, text="Events", relief=tk.GROOVE, borderwidth=2, padx=10,pady=10)
@@ -8,6 +10,7 @@ frm_ent2 = tk.LabelFrame(master=window, width=5, text="Min. Day(s)", relief=tk.G
 frm_ent3 = tk.LabelFrame(master=window, width=5, text="Max. Day(s)", relief=tk.GROOVE, borderwidth=2, padx=10,pady=10)
 frm_chk2 = tk.LabelFrame(master=window, text="Bound", relief=tk.GROOVE, borderwidth=2, padx=10,pady=9)
 frm_chk1 = tk.LabelFrame(master=window, text="Exact", relief=tk.GROOVE, borderwidth=2, padx=10,pady=9)
+frm_date = tk.LabelFrame(master=window, text="Must", relief=tk.GROOVE, borderwidth=2, padx=10,pady=9)
 frm_btn = tk.Frame(master=window, width=40, padx=10,pady=15)
 
 frm_ent1.pack(fill=tk.BOTH, side=tk.LEFT, expand=True, padx=10, pady=10)
@@ -15,48 +18,60 @@ frm_ent2.pack(fill=tk.BOTH, side=tk.LEFT, padx=10, pady=10)
 frm_ent3.pack(fill=tk.BOTH, side=tk.LEFT, padx=10, pady=10)
 frm_chk1.pack(fill=tk.BOTH, side=tk.LEFT, padx=10, pady=10)
 frm_chk2.pack(fill=tk.BOTH, side=tk.LEFT, padx=10, pady=10)
+frm_date.pack(fill=tk.BOTH, side=tk.LEFT, padx=10, pady=10)
 frm_btn.pack(fill=tk.BOTH, side=tk.LEFT)
+
+cal=DateEntry(frm_date,selectmode='day')
+# cal.pack()
 
 # 여기 밑에는.. 엔트리 리스트 5개 만들어 놓고 버튼 누르면 행을 추가해주는 건데,
 # 이벤트 명 / 기간(2열?) / 체크박스(붙어야하는 일정?) / 체크박스(고정 기간) 으로 5열로 관리 필요할 듯
 # add(): 버튼 눌러서 조건 행 더하기
 
 preset_ent = string.ascii_uppercase
-entlist = [[],[],[],[],[]]
+entlist = [[],[],[],[],[],[]]
 val_ent = []
 count = 0 # To keep track of inserted entries
 
 print(type(preset_ent[0]))
 
-for i in range(0,5):
+for i in range(len(entlist)):
     entlist[0].append(tk.Entry(master=frm_ent1))
-    entlist[1].append(tk.Entry(master=frm_ent2,width=5))
-    entlist[2].append(tk.Entry(master=frm_ent3,width=5))
+    entlist[1].append(tk.Entry(master=frm_ent2,width=2))
+    entlist[2].append(tk.Entry(master=frm_ent3,width=2))
     entlist[3].append(tk.Checkbutton(master=frm_chk1))
     entlist[4].append(tk.Checkbutton(master=frm_chk2))
-    # entlist[-1].grid(row=idx,column=0,padx=5,pady=2)
+    entlist[5].append(tk.Radiobutton(master=frm_date, value=count))
+    
     for j in range(3):
         entlist[j][-1].pack(pady=3,fill=tk.BOTH)
-    for j in range(3,5):
-        if (i!=4)|(j!=4):
+    for j in range(3,6):
+    # Lazy fix... Gotta come back to this
+        if (i==4)&(j==4):
+            print(len(entlist[4]))
+            entlist[j][-1].destroy()
+            entlist[j].pop()
+        else:
             entlist[j][-1].pack(fill=tk.BOTH)
 
     entlist[0][-1].insert(index=0, string=preset_ent[count%len(preset_ent)]+'. ')
     count +=1
-
+#Lazy fix, to have only one radiobutton as selected
+entlist[5][0].select()
 def add():
     global count
     # MAX_NUM = 4 # Maximum number of entries
     # if count <= MAX_NUM:
     entlist[0].append(tk.Entry(master=frm_ent1)) # Create and append to list
-    entlist[1].append(tk.Entry(master=frm_ent2, width=5))
-    entlist[2].append(tk.Entry(master=frm_ent3, width=5))
+    entlist[1].append(tk.Entry(master=frm_ent2, width=2))
+    entlist[2].append(tk.Entry(master=frm_ent3, width=2))
     entlist[3].append(tk.Checkbutton(master=frm_chk1))
     entlist[4].append(tk.Checkbutton(master=frm_chk2))
+    entlist[5].append(tk.Radiobutton(master=frm_date, value=count))
     # entlist[-1].grid(row=count,column=0,padx=5,pady=2) # Place the just created widget
     for i in range(3):
         entlist[i][-1].pack(pady=3,fill=tk.BOTH)
-    for i in range(3,5):
+    for i in range(3,6):
         entlist[i][-1].pack(fill=tk.BOTH)
     entlist[0][-1].insert(index=0, string=preset_ent[count%len(preset_ent)]+'. ')
     count += 1
@@ -65,8 +80,8 @@ def delete():
     global count
     # MAX_NUM = 4 # Maximum number of entries
     # if count <= MAX_NUM:
-    if len(entlist[0])!=0:
-        for i in range(5):
+    if len(entlist[0])>2:
+        for i in range(len(entlist)):
             entlist[i][-1].destroy()
             entlist[i].pop()
         count -= 1
